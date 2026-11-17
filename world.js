@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //Functionality for Lookup Button
     const lookupBtn = document.getElementById('lookup');
-    const lookupCitiesBtn = document.getElementById('lookup');
+    const lookupCitiesBtn = document.getElementById('lookup-cities');
 
     lookupBtn.addEventListener('click', function() {
 

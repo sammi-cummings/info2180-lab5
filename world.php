@@ -15,14 +15,16 @@ if ($lookup == 'cities'){
   
   $stmt = $conn->prepare('SELECT cities.name AS city_name, cities.district, cities.population 
                         FROM cities JOIN countries ON cities.country_code = countries.code 
-                        WHERE countries.name name LIKE: country');
+                        WHERE countries.name name LIKE :country');
   $stmt->execute(['country' => '%$country%']);
 
   $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-  echo '<table border= 1>;
+
+  if (count($results) > 0){
+    echo '<table style ="font-family: Poppins, sans-serif, Helvetica, Calibri;">;
         <thead>
-           <tr>
+           <tr style = "font-size: 180px; background-color: darkblue; color: #fff;>
               <th>City</th>
               <th>District</th>
               <th>Population</th>
@@ -30,35 +32,32 @@ if ($lookup == 'cities'){
         </thead>
 
         <tbody>';
-        
-  if (count($results) > 0){
-    echo '<tr>';
+    
     foreach ($results as $row){
-      echo '<td>'. htmlspecialchars($row['name']). '</td>
+      echo '<tr style = "background-color: #fff; color: #000;>
+            <td>'. htmlspecialchars($row['name']). '</td>
             <td>'. htmlspecialchars($row['district']). '</td>
-            <td>'. htmlspecialchars($row['population']). '</td>';
+            <td>'. htmlspecialchars($row['population']). '</td>
+           </tr>';          
+    }
+    echo'</tbody></table>';
   }
-  echo'</tr>';
-}
 
-else {
-  echo '<h1>No Countries Found</h1>';
-}
-
-echo'</tbody>
-</table>';
+  else {
+    echo '<h1>No Cities Found</h1>';
+  }
 }
 
 else{
-$stmt= $conn->prepare("SELECT * FROM countries WHERE name LIKE :country");
+$stmt= $conn->prepare('SELECT * FROM countries WHERE name LIKE :country');
 $stmt->execute(['country' => '%$country%']);
 $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
 //Outputs the country from the search input if not empty
-echo '<table border= 1>;
+if (count($results) > 0){
+  echo '<table style = "border= 1px solid darkblue; font-family: Poppins, sans-serif, Helvetica, Calibri;">;
         <thead>
-           <tr>
+           <tr style = "font-size: 180px; background-color: darkblue; color: #fff;">
               <th>Country</th>
               <th>Continent</th>
               <th>Independence Year</th>
@@ -67,23 +66,19 @@ echo '<table border= 1>;
         </thead>
 
         <tbody>';
-
-if (count($results) > 0){
-  echo '<tr>';
+  
   foreach ($results as $row){
-    echo '<td>'. htmlspecialchars($row['name']). '</td>
+    echo '<tr style = "background-color: #fff; color: #000;">
+          <td>'. htmlspecialchars($row['name']). '</td>
           <td>'. htmlspecialchars($row['continent']). '</td>
           <td>'. htmlspecialchars($row['independence_year']). '</td>
-          <td>'. htmlspecialchars($row['head_of_state']). '</td>';
+          <td>'. htmlspecialchars($row['head_of_state']). '</td>
+          </tr>';  
   }
-  echo'</tr>';
+  echo'</tbody></table>'; 
 }
-
 else {
   echo '<h1>No Countries Found</h1>';
 }
-
-echo'</tbody>
-</table>';
 }
 ?>
